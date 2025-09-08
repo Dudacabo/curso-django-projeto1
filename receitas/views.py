@@ -1,5 +1,4 @@
-from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 from utils.receitas.factory import make_receita
 from receitas.models import Receita
 
@@ -11,19 +10,21 @@ def home(request):
     })
 
 def category(request, category_id):
-    receitas = Receita.objects.filter(
+    receitas = get_list_or_404( 
+        Receita.objects.filter(
         category__id=category_id, is_published = True, ).order_by('-id')
-    
-    if not receitas:
-        raise Http404('Not Found ;) ')
+    )
     
     return render(request, 'receitas/pages/category.html', context={
         'receitas': receitas,
-        'title': f'{receitas.first().category.name} - Category | '
+        'title': f'{receitas[0].category.name} - Category | '
     })
 
 def receita(request, id):
+    receita = Receita.objects.filter(
+        id=id, is_published = True, ).order_by('-id').first()
+    
     return render(request, 'receitas/pages/receita-view.html', context={
-        'receita': make_receita(),
+        'receita': receita,
         'is_detail_page' : True
     })

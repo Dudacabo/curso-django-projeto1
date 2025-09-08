@@ -71,7 +71,11 @@
     {% endif %}
     {% if is_detail_page is True %}
         <div class="preparation-steps">
-            {{ receita.preparation_steps |linebreaksbr }}
+            {% if receita.preparation_steps_is_html is True %}
+                 {{ receita.preparation_steps |safe }}
+            {% else %}
+                 {{ receita.preparation_steps |linebreaksbr }}
+            {% endif %}
         </div>
     {% endif %}
 
