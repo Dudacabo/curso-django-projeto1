@@ -1,11 +1,15 @@
 {% extends "global/base.html" %}
 
-<title> {% block title %}HOME | {% endblock title %} Receitas</title>
+{% block title %}HOME | {% endblock title %}
 
 {% block content %}
     <div class="main-content main-content-list container">
         {% for receita in receitas  %}
-         {% include 'receitas/partials/receita.html' %}
+            {% include 'receitas/partials/receita.html' %}
+        {% empty %}
+            <div class="center m-y">
+                <h1> Não tem receitas aqui :/ </h1>
+            </div>
         {% endfor %}
         
     </div>
