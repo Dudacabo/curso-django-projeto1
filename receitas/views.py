@@ -21,8 +21,7 @@ def category(request, category_id):
     })
 
 def receita(request, id):
-    receita = Receita.objects.filter(
-        id=id, is_published = True, ).order_by('-id').first()
+    receita = get_object_or_404(Receita, id=id, is_published = True, )
     
     return render(request, 'receitas/pages/receita-view.html', context={
         'receita': receita,
