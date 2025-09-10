@@ -23,3 +23,10 @@ class ReceitaViewsTest(TestCase):
     def test_receita_home_view_loads_correct_template(self):
         response = self.client.get(reverse('receitas:home'))
         self.assertTemplateUsed(response, "receitas/pages/home.html")    
+
+    def test_receita_home_template_shows_no_receitas_found_if_no_receitas(self):
+        response = self.client.get(reverse('receitas:home'))
+        self.assertIn(
+            '<h1> Não tem receitas aqui :/ </h1>',
+            response.content.decode('utf-8')
+        )
