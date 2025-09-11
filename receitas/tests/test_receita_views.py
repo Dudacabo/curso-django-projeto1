@@ -8,14 +8,6 @@ class ReceitaViewsTest(TestCase):
         view = resolve(reverse('receitas:home'))
         self.assertIs(view.func, views.home)
 
-    def test_receita_category_view_function_is_correct(self):
-        view = resolve(reverse('receitas:category', kwargs={'category_id': 1}))
-        self.assertIs(view.func, views.category)
-
-    def test_receita_detail_view_function_is_correct(self):
-        view = resolve(reverse('receitas:receita', kwargs={'id': 1}))
-        self.assertIs(view.func, views.receita)
-
     def test_receita_home_view_returns_status_code_200_OK(self):
         response = self.client.get(reverse('receitas:home'))
         self.assertEqual(response.status_code, 200)
@@ -30,3 +22,20 @@ class ReceitaViewsTest(TestCase):
             '<h1> Não tem receitas aqui :/ </h1>',
             response.content.decode('utf-8')
         )
+
+    def test_receita_category_view_function_is_correct(self):
+        view = resolve(reverse('receitas:category', kwargs={'category_id': 1}))
+        self.assertIs(view.func, views.category)
+
+    def test_receita_category_view_returns_404_if_no_receitas_found(self):
+        response = self.client.get(reverse('receitas:category', kwargs={'category_id': 1000}))
+        self.assertEqual(response.status_code, 404)
+
+
+    def test_receita_detail_view_function_is_correct(self):
+        view = resolve(reverse('receitas:receita', kwargs={'id': 1}))
+        self.assertIs(view.func, views.receita)
+
+    def test_receita_detail_view_returns_404_if_no_receitas_found(self):
+        response = self.client.get(reverse('receitas:receita', kwargs={'id': 1000}))
+        self.assertEqual(response.status_code, 404) 
