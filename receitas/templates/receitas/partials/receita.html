@@ -1,9 +1,11 @@
  <div class="receita receita-list-item">
-    <div class="receita-cover">
-       <a href="{% url "receitas:receita" receita.id %}"> 
-           <img src="{{ receita.cover.url }}" alt="Temporário">
-       </a>
-    </div>
+    {% if receita.cover %}
+        <div class="receita-cover">
+            <a href="{% url "receitas:receita" receita.id %}"> 
+                <img src="{{ receita.cover.url }}" alt="Temporário">
+            </a>
+        </div>
+    {% endif %}
 
     <div class="receita-title-container">
         <h2 class="receita-title">

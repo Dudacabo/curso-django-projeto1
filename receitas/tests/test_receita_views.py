@@ -47,7 +47,15 @@ class ReceitaViewsTest(TestCase):
             preparation_steps_is_html = False,
             is_published = True,
         )
-        assert 1 == 1
+        response = self.client.get(reverse('receitas:home'))
+        content = response.content.decode('utf-8')
+        response_context_receitas = response.context['receitas']
+
+        self.assertIn('Receita Title', content)
+        self.assertIn('10 Minutos', content)
+        self.assertIn('5 Porções', content)
+        self.assertEqual(len(response_context_receitas), 1)
+        
 
     def test_receita_category_view_function_is_correct(self):
         view = resolve(reverse('receitas:category', kwargs={'category_id': 1}))
