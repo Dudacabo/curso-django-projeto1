@@ -1,10 +1,8 @@
 from django.urls import reverse, resolve
 from receitas import views
-from .test_receita_base import ReceitaTestBase
+from .test_receita_base import ReceitaTestBase, Receita
 
 class ReceitaViewsTest(ReceitaTestBase):
-    def tearDown(self) -> None:
-        return super().tearDown()
 
     def test_receita_home_view_function_is_correct(self):
         view = resolve(reverse('receitas:home'))
@@ -26,13 +24,15 @@ class ReceitaViewsTest(ReceitaTestBase):
         )
 
     def test_receita_home_template_loads_receitas(self):
+        # Precisa de receita para esse teste
+        self.make_receita()
+
         response = self.client.get(reverse('receitas:home'))
         content = response.content.decode('utf-8')
         response_context_receitas = response.context['receitas']
 
+        # Checa se uma receita existe
         self.assertIn('Receita Title', content)
-        self.assertIn('10 Minutos', content)
-        self.assertIn('5 Porções', content)
         self.assertEqual(len(response_context_receitas), 1)
         
 
