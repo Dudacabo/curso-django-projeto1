@@ -16,7 +16,7 @@ class ReceitaViewsTest(ReceitaTestBase):
         response = self.client.get(reverse('receitas:home'))
         self.assertTemplateUsed(response, "receitas/pages/home.html")    
 
-    def test_receita_home_template_shows_no_receitas_found_if_no_receitas(self):
+    def test_receita_home_template_shows_no_receitas_found_if_no_receita(self):
         response = self.client.get(reverse('receitas:home'))
         self.assertIn(
             '<h1> Não tem receitas aqui :/ </h1>',
@@ -44,6 +44,16 @@ class ReceitaViewsTest(ReceitaTestBase):
         response = self.client.get(reverse('receitas:category', kwargs={'category_id': 1000}))
         self.assertEqual(response.status_code, 404)
 
+    def test_receita_category_template_loads_receita(self):
+        needed_title = 'This is a category test'
+        # Precisa de receita para esse teste
+        self.make_receita(title=needed_title)
+
+        response = self.client.get(reverse('receitas:category', args=(1,)))
+        content = response.content.decode('utf-8')
+
+        # Checa se uma receita existe
+        self.assertIn(needed_title, content)
 
     def test_receita_detail_view_function_is_correct(self):
         view = resolve(reverse('receitas:receita', kwargs={'id': 1}))
@@ -52,3 +62,14 @@ class ReceitaViewsTest(ReceitaTestBase):
     def test_receita_detail_view_returns_404_if_no_receitas_found(self):
         response = self.client.get(reverse('receitas:receita', kwargs={'id': 1000}))
         self.assertEqual(response.status_code, 404) 
+
+    def test_receita_detail_template_loads_the_correct_receita(self):
+        needed_title = 'This is a detail page - It load one recipe'
+        # Precisa de receita para esse teste
+        self.make_receita(title=needed_title)
+
+        response = self.client.get(reverse('receitas:receita', kwargs={'id': 1}))
+        content = response.content.decode('utf-8')
+
+        # Checa se uma receita existe
+        self.assertIn(needed_title, content)
