@@ -34,8 +34,21 @@ class ReceitaViewsTest(ReceitaTestBase):
         # Checa se uma receita existe
         self.assertIn('Receita Title', content)
         self.assertEqual(len(response_context_receitas), 1)
-        
 
+    def test_receita_home_template_dont_load_receitas_not_published(self):
+        """Testa receita is_published False não aparece """
+
+        # Precisa de receita para esse teste
+        self.make_receita(is_published=False)
+
+        response = self.client.get(reverse('receitas:home'))
+
+        # Checa se uma receita existe
+        self.assertIn(
+            '<h1> Não tem receitas aqui :/ </h1>',
+            response.content.decode('utf-8')
+        )
+        
     def test_receita_category_view_function_is_correct(self):
         view = resolve(reverse('receitas:category', kwargs={'category_id': 1}))
         self.assertIs(view.func, views.category)
@@ -55,6 +68,16 @@ class ReceitaViewsTest(ReceitaTestBase):
         # Checa se uma receita existe
         self.assertIn(needed_title, content)
 
+    def test_receita_category_template_dont_load_receitas_not_published(self):
+        """Testa receita is_published False não aparece """
+
+        # Precisa de receita para esse teste
+        receita = self.make_receita(is_published=False)
+
+        response = self.client.get(reverse('receitas:receita', kwargs={'id': receita.category.id}))
+
+        self.assertEqual(response.status_code, 404)
+
     def test_receita_detail_view_function_is_correct(self):
         view = resolve(reverse('receitas:receita', kwargs={'id': 1}))
         self.assertIs(view.func, views.receita)
@@ -73,3 +96,13 @@ class ReceitaViewsTest(ReceitaTestBase):
 
         # Checa se uma receita existe
         self.assertIn(needed_title, content)
+
+    def test_receita_detail_template_dont_load_receitas_not_published(self):
+        """Testa receita is_published False não aparece """
+
+        # Precisa de receita para esse teste
+        receita = self.make_receita(is_published=False)
+
+        response = self.client.get(reverse('receitas:receita', kwargs={'id': receita.id}))
+
+        self.assertEqual(response.status_code, 404)
