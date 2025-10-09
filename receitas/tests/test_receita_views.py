@@ -3,7 +3,7 @@ from receitas import views
 from .test_receita_base import ReceitaTestBase
 
 class ReceitaViewsTest(ReceitaTestBase):
-
+                # TESTS DA HOME
     def test_receita_home_view_function_is_correct(self):
         view = resolve(reverse('receitas:home'))
         self.assertIs(view.func, views.home)
@@ -48,7 +48,7 @@ class ReceitaViewsTest(ReceitaTestBase):
             '<h1> Não tem receitas aqui :/ </h1>',
             response.content.decode('utf-8')
         )
-        
+                # TESTS DA CATEGORY
     def test_receita_category_view_function_is_correct(self):
         view = resolve(reverse('receitas:category', kwargs={'category_id': 1}))
         self.assertIs(view.func, views.category)
@@ -77,7 +77,7 @@ class ReceitaViewsTest(ReceitaTestBase):
         response = self.client.get(reverse('receitas:receita', kwargs={'id': receita.category.id}))
 
         self.assertEqual(response.status_code, 404)
-
+                # TESTS DA RECEITA
     def test_receita_detail_view_function_is_correct(self):
         view = resolve(reverse('receitas:receita', kwargs={'id': 1}))
         self.assertIs(view.func, views.receita)
