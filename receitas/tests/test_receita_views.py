@@ -24,7 +24,7 @@ class ReceitaViewsTest(ReceitaTestBase):
         )
 
     def test_receita_home_template_loads_receitas(self):
-        # Precisa de receita para esse teste
+        # Cria uma receita
         self.make_receita()
 
         response = self.client.get(reverse('receitas:home'))
@@ -38,7 +38,7 @@ class ReceitaViewsTest(ReceitaTestBase):
     def test_receita_home_template_dont_load_receitas_not_published(self):
         """Testa receita is_published False não aparece """
 
-        # Precisa de receita para esse teste
+        # Cria uma receita
         self.make_receita(is_published=False)
 
         response = self.client.get(reverse('receitas:home'))
@@ -59,19 +59,19 @@ class ReceitaViewsTest(ReceitaTestBase):
 
     def test_receita_category_template_loads_receita(self):
         needed_title = 'This is a category test'
-        # Precisa de receita para esse teste
+        # Cria uma receita
         self.make_receita(title=needed_title)
 
         response = self.client.get(reverse('receitas:category', args=(1,)))
         content = response.content.decode('utf-8')
 
-        # Checa se uma receita existe
+        # Checa se o titulo está no template
         self.assertIn(needed_title, content)
 
     def test_receita_category_template_dont_load_receitas_not_published(self):
         """Testa receita is_published False não aparece """
 
-        # Precisa de receita para esse teste
+        # Cria uma receita
         receita = self.make_receita(is_published=False)
 
         response = self.client.get(reverse('receitas:receita', kwargs={'id': receita.category.id}))
@@ -88,19 +88,19 @@ class ReceitaViewsTest(ReceitaTestBase):
 
     def test_receita_detail_template_loads_the_correct_receita(self):
         needed_title = 'This is a detail page - It load one recipe'
-        # Precisa de receita para esse teste
+        # Cria uma receita
         self.make_receita(title=needed_title)
 
         response = self.client.get(reverse('receitas:receita', kwargs={'id': 1}))
         content = response.content.decode('utf-8')
 
-        # Checa se uma receita existe
+        # Checa se o titulo está no template
         self.assertIn(needed_title, content)
 
     def test_receita_detail_template_dont_load_receitas_not_published(self):
         """Testa receita is_published False não aparece """
 
-        # Precisa de receita para esse teste
+        # Cria uma receita
         receita = self.make_receita(is_published=False)
 
         response = self.client.get(reverse('receitas:receita', kwargs={'id': receita.id}))
