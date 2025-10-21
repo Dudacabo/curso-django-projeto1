@@ -113,3 +113,7 @@ class ReceitaViewsTest(ReceitaTestBase):
     def test_receita_search_uses_correct_view_function(self):
         resolved = resolve(reverse('receitas:search'))
         self.assertIs(resolved.func, views.search)
+
+    def test_receita_search_loads_correct_template(self):
+        response = self.client.get(reverse('receitas:search'))
+        self.assertTemplateUsed(response, "receitas/pages/search.html")
