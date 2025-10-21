@@ -30,3 +30,7 @@ def receita(request, id):
         'receita': receita,
         'is_detail_page' : True
     })
+
+
+def search(request):
+    ...
