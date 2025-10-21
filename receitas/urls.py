@@ -10,4 +10,5 @@ urlpatterns = [
     path('receitas/<int:id>/', views.receita, name= "receita"),
     path('receitas/search/', lambda request: ..., name="search"),
     
+    
 ]
