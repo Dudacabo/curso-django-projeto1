@@ -115,7 +115,7 @@ class ReceitaViewsTest(ReceitaTestBase):
         self.assertIs(resolved.func, views.search)
 
     def test_receita_search_loads_correct_template(self):
-        response = self.client.get(reverse('receitas:search'))
+        response = self.client.get(reverse('receitas:search') + '?q=teste')
         self.assertTemplateUsed(response, "receitas/pages/search.html")
 
     def test_receita_search_raises_404_if_no_search_term(self):
