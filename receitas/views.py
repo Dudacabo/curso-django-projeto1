@@ -34,9 +34,9 @@ def receita(request, id):
 
 
 def search(request):
-    search_term = request.GET.get('q')
+    search_term = request.GET.get('q', '').strip()
 
     if not search_term:
         raise Http404()
     
-    return render(request, "receitas/pages/search.html" )
+    return render(request, "receitas/pages/search.html", {'page_title': f'Pesquisa por "{search_term}" |', 'search_term': search_term,})
