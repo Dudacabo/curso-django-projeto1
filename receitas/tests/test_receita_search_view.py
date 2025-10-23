@@ -44,6 +44,30 @@ class ReceitaSearchViewTest(ReceitaTestBase):
         self.assertIn(receita1, response_both.context['receitas'])
         self.assertIn(receita2, response_both.context['receitas'])
 
+
+    def test_receita_search_can_find_receita_by_description(self):
+        description1 = "Nossa descrição um"
+        description2 = "Nossa descrição dois"
+
+        receita1 = self.make_receita(slug='desc-1', description=description1, author_data={"username": "userum"})
+        receita2 = self.make_receita(slug='desc-2', description=description2, author_data={"username": "userdois"})
+
+        search_url = reverse('receitas:search')
+        response1 = self.client.get(f'{search_url}?q={description1}')
+        response2 = self.client.get(f'{search_url}?q={description2}')
+        response_both = self.client.get(f'{search_url}?q=Nossa')
+
+        self.assertIn(receita1, response1.context['receitas'])
+        self.assertNotIn(receita2, response1.context['receitas'])
+
+        self.assertIn(receita2, response2.context['receitas'])
+        self.assertNotIn(receita1, response2.context['receitas'])
+
+        self.assertIn(receita1, response_both.context['receitas'])
+        self.assertIn(receita2, response_both.context['receitas'])
+
+        
+
         
 
 
