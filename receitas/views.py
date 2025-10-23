@@ -39,6 +39,9 @@ def search(request):
     if not search_term:
         raise Http404()
     
-    receitas = Receita.objects.filter(Q(title__icontains=search_term) | Q(description__icontains=search_term),).order_by('-id')
+    receitas = Receita.objects.filter(
+        Q(Q(title__icontains=search_term) | Q(description__icontains=search_term),),
+          is_published=True).order_by('-id')
     
-    return render(request, "receitas/pages/search.html", {'page_title': f'Pesquisa por "{search_term}" |', 'search_term': search_term, "receitas": receitas })
+    return render(request, "receitas/pages/search.html",
+                   {'page_title': f'Pesquisa por "{search_term}" |', 'search_term': search_term, "receitas": receitas })
