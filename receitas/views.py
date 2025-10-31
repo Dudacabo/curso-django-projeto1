@@ -3,17 +3,28 @@ from receitas.models import Receita
 from django.http.response import Http404
 from django.db.models import Q
 from django.core.paginator import Paginator
-
+from utils.pagination import make_pagination_range
 
 def home(request):
     receitas = Receita.objects.filter(is_published = True,).order_by('-id')
 
-    current_page = request.GET.get('page', 1)
+    try:
+        current_page = int(request.GET.get('page', 1))
+    except ValueError:
+        current_page = 1
+
     paginator = Paginator(receitas, 9)
     page_obj = paginator.get_page(current_page)
 
+    pagination_range = make_pagination_range(
+        paginator.page_range,
+        4,
+        current_page
+    )
+
     return render(request, 'receitas/pages/home.html', context={
         'receitas': page_obj,
+        'pagination_range': pagination_range
     })
 
 
