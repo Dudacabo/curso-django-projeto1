@@ -2,13 +2,18 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404
 from receitas.models import Receita
 from django.http.response import Http404
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 def home(request):
     receitas = Receita.objects.filter(is_published = True,).order_by('-id')
 
+    current_page = request.GET.get('page', 1)
+    paginator = Paginator(receitas, 9)
+    page_obj = paginator.get_page(current_page)
+
     return render(request, 'receitas/pages/home.html', context={
-        'receitas': receitas,
+        'receitas': page_obj,
     })
 
 
