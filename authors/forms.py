@@ -104,3 +104,14 @@ class RegisterForm(forms.ModelForm):
             )
 
         return data
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if password != password2:
+            raise ValidationError({
+               'password2' :'It must be the same as the previous password.',
+            
+            })
