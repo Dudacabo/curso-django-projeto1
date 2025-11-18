@@ -64,3 +64,20 @@ class ReceitaHomeViewTest(ReceitaTestBase):
             self.assertEqual(len(paginator.get_page(1)), 3)
             self.assertEqual(len(paginator.get_page(2)), 3)
             self.assertEqual(len(paginator.get_page(3)), 2)
+
+
+    def test_invalid_page_query_uses_page_one(self):
+        for i in range(8):
+            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            self.make_receita(**kwargs)
+
+        with patch('receitas.views.PER_PAGE', new=3):
+
+            response = self.client.get(reverse('receitas:home') + '?page=12A')
+            self.assertEqual(response.context['receitas'].number,1)
+
+            response = self.client.get(reverse('receitas:home') + '?page=2')
+            self.assertEqual(response.context['receitas'].number,2)
+            
+            response = self.client.get(reverse('receitas:home') + '?page=3')
+            self.assertEqual(response.context['receitas'].number,3)
